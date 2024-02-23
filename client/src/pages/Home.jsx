@@ -14,10 +14,10 @@ const Home = () => {
         {/* right division */}
             <div className='flex-1 bg-black bg-opacity-50 flex-col'>
                 <nav className='text-white text-[13px] lg:text-[20px] opacity-80 flex justify-evenly mt-8'>
-                    <a href='/dashboard'>About</a>
-                    <a href='/dashboard'>SignIn</a>
+                    <a href='/about'>About</a>
+                    <a href='/signin'>SignIn</a>
                     <a href='/sign-up'>SignUp</a>
-                    <a href='/dashboard'>Contact</a>
+                    <a href='/contact'>Contact</a>
                 </nav>
                 <div className='flex-col mt-[30%] lg:mt-[38%] text-white flex justify-center items-center'>
                     <h1 className='text-[42px] lg:text-[80px] font-bold '>About Us</h1>
