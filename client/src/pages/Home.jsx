@@ -15,7 +15,7 @@ const Home = () => {
             <div className='flex-1 bg-black bg-opacity-50 flex-col'>
                 <nav className='text-white text-[13px] lg:text-[20px] opacity-80 flex justify-evenly mt-8'>
                     <a href='/about'>About</a>
-                    <a href='/signin'>SignIn</a>
+                    <a href='/sign-in'>SignIn</a>
                     <a href='/sign-up'>SignUp</a>
                     <a href='/contact'>Contact</a>
                 </nav>
