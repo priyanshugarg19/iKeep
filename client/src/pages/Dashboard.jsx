@@ -4,7 +4,8 @@ import Header from '../components/header';
 function Dashboard() {
   return (
     <>
-      <div>
+    <Header />
+      <div className=''>
         Dashboard
       </div>
     </>
