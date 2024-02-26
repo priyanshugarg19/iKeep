@@ -5,6 +5,7 @@ import logo1 from '../assets/logo1.png';
 import {motion} from 'framer-motion';
 import {fadeIn} from '../variants.js';
 import { Button, Navbar, Spinner, TextInput } from 'flowbite-react'
+import OAuth from '../components/oAuth.jsx';
 
 function SignUp() {
   const navigate= useNavigate();
@@ -107,6 +108,7 @@ function SignUp() {
                             </span>
                           <span class="relative invisible">Button Text</span></>)}
                         </button> 
+                        <OAuth />
                         <Link className='text-white leading-[0]' to="/sign-in">
                           Already have an account?
                         </Link>   

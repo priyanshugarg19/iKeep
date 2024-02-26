@@ -7,6 +7,7 @@ import {fadeIn} from '../variants.js';
 import { Button, Navbar, Spinner, TextInput } from 'flowbite-react'
 import { signInSuccess, signInStart, signInFailure } from '../redux/user/userSlice.js';
 import { useDispatch, useSelector } from 'react-redux';
+import OAuth from '../components/oAuth.jsx';
 
 function SignIn() {
   const navigate= useNavigate();
@@ -103,6 +104,7 @@ function SignIn() {
                             </span>
                           <span class="relative invisible">Button Text</span></>)}
                         </button> 
+                        <OAuth />
                         <Link className='text-white leading-[0]' to="/sign-up">
                           Don't have an account?
                         </Link>   
