@@ -24,16 +24,19 @@ function Dashboard() {
 
   return (
     <>
-    <Header />
+      <Header />
+
+      <div className='min-h-screen flex flex-col lg:flex-row'>
       <div>
 
         <DashSidebar />
 
       </div>
-      <div>
+      <div className=' w-full'>
 
         {tab==='profile' && <DashProfile />}
 
+      </div>
       </div>
     </>
   )
