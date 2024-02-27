@@ -7,7 +7,7 @@ import Home from './pages/Home';
 import Projects from './pages/Projects';
 import Dashboard from './pages/Dashboard';
 import Header from './components/header';
-
+import PrivateRoute from './components/privateRoute';
 
 const App = () => {
   // const location = useLocation();
@@ -18,7 +18,9 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/sign-in" element={<SignIn />}/>
         <Route path="/sign-up" element={<SignUp />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route element = {<PrivateRoute />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Route>
         <Route path="/projects" element={<Projects />} />
         <Route path='/about' element={<About />} />
         
