@@ -1,18 +1,25 @@
 import {React, useRef, useState, useEffect} from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import {getDownloadURL, getStorage, ref, uploadBytesResumable} from 'firebase/storage';
 import {app} from '../firebase';
 import {motion} from 'framer-motion';
 import { fadeIn } from '../variants';
 import { CircularProgressbar } from 'react-circular-progressbar';
+import { updateStart, updateFailure,updateSuccess } from '../redux/user/userSlice';
 import 'react-circular-progressbar/dist/styles.css';
 
 function DashProfile() {
+
+    const dispatch= useDispatch()
     const {currentUser} = useSelector(state=> state.user)
     const [imageFile, setImageFile] = useState(null);
     const [imageFileUrl, setImageFileUrl] = useState(null);
     const [imageUploadProgress, setImageUploadProgress] = useState(null);
     const [imageUploadError, setImageUploadError] = useState(null);
+    const [formData, setFormData]= useState({})
+    const [buttonBool, setButtonBool]= useState(false)
+    const [updatingSuccess, setUpdatingSuccess]= useState(null);
+    const [updatingError, setUpdatingError]= useState(null);
     const filePickerRef = useRef();
     const handleImageChange = (e) => {
       const file = e.target.files[0];
@@ -29,6 +36,7 @@ function DashProfile() {
     }, [imageFile]);
 
     const uploadImage = async() => {
+      setButtonBool(true);
       setImageUploadError(null);
       console.log('file is uploading...');
       const storage = getStorage(app);
@@ -44,26 +52,64 @@ function DashProfile() {
             // console.log(`upload is ${progress} done...`);
         },
         (error) => {
+          setButtonBool(false);
           setImageUploadError("Image couldn't be uploaded (note: File must be less than 2mb)");
           setImageUploadProgress(null);
         },
         () => {
+          setButtonBool(false);
           getDownloadURL(uploadTask.snapshot.ref).then((downloadUrl) => {
             setImageFileUrl(downloadUrl);
             setImageUploadProgress(null);
+            setFormData({...formData, photoUrl : downloadUrl})
           });
         }
       );
     }
+    const handleChange=(e)=>{
+      setUpdatingError(null);
+      setUpdatingSuccess(null);
+      setFormData({...formData, [e.target.id]: e.target.value})
+    }
+    
+    const handleSubmit=async (e)=>{
+      e.preventDefault();
+      setUpdatingError(null);
+      setUpdatingSuccess(null);
+      if(Object.keys(formData).length==0){
+        setUpdatingError('No Changes Made')
+        return;
+      }
+      try {
+        dispatch(updateStart());
+        const res= await fetch(`/api/user/update/${currentUser._id}`,{
+          method: 'PUT',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(formData) 
+        })
+        const data= await res.json();
+        if(!res.ok){
+          setUpdatingError(data.message);
+          dispatch(updateFailure(data.message));
+        }
+        else{
+          dispatch(updateSuccess(data));
+          setUpdatingSuccess('Profile Updated Successfully');
+        }
 
+      } catch (error) {
+        setUpdatingError(error.message)
+        dispatch(updateFailure(error.message))
+      }
+    }
     
 
   return (
-    <div className='lg:pt-20 max-w-md p-3 mx-auto w-full'>
+    <div className='lg:pt-20 max-w-xl p-3 mx-auto w-full'>
         <h1 className='my-7 text-center font-semibold text-3xl mr-[8px]'>
             Profile
         </h1>
-        <form className='flex flex-col'>
+        <form onSubmit={handleSubmit} className='flex flex-col'>
             <input type='file'  accept='image/*' onChange={handleImageChange} className='hidden' ref={filePickerRef}/>
             <div className='relative w-32 h-32 self-center cursor-pointer shadow-md rounded-full overflow-hidden' onClick={() => filePickerRef.current.click()}>
                 {
@@ -102,29 +148,55 @@ function DashProfile() {
                               </motion.div>
                         }  
             <div className='flex flex-col p-6 gap-y-6 items-center'>
-                        <article>
-                          <label className='dark:text-gray-200'>Username</label>
-                          <input autoComplete='off' className="block w-[350px] h-[35px] mt-2 border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900  focus:ring-purple-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:placeholder-gray-400 dark:focus:border-gray-500 dark:focus:ring-gray-500 p-2.5 text-sm pr-10 rounded-lg" type="text" id='username' defaultValue={currentUser.username} placeholder="Username..." />
-                        </article>
-                        <article>
-                          <label className='dark:text-gray-200 '>Email</label>
-                          <input autoComplete='off' className="block w-[350px] h-[35px] mt-2 border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900  focus:ring-purple-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:placeholder-gray-400 dark:focus:border-gray-500 dark:focus:ring-gray-500 p-2.5 text-sm pr-10 rounded-lg" type="email" id='email' defaultValue={currentUser.email} placeholder="eg: name@gmail.com" />
-                        </article>
-                        <article>
-                          <label className='dark:text-gray-200'>Password</label>
-                          <input autoComplete='off' className="block w-[350px] h-[35px] border mt-2 disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900  focus:ring-purple-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:placeholder-gray-400 dark:focus:border-gray-500 dark:focus:ring-gray-500 p-2.5 text-sm pr-10 rounded-lg" type="password" id='password' placeholder=" New Password..." />
-                        </article> 
-                        <article>
-                            <button href="#_" class="inline-flex items-center justify-center h-8 w-[350px] px-10 py-0 text-sm font-semibold text-center bg-sky-600 text-white dark:bg-transparent dark:text-gray-200 no-underline align-middle transition duration-200 ease-in dark:border-2 hover:border-2 dark:border-gray-600 border-gray-300 border-b border-solid rounded-full cursor-pointer select-none hover:bg-transparent dark:hover:text-white dark:hover:border-white hover:border-sky-600 hover:text-sky-600 focus:shadow-xs focus:no-underline">
-                                UPDATE
-                            </button>
-                        </article>
+                          <article>
+                            <label className='dark:text-gray-200'>Username</label>
+                            <input autoComplete='off' onChange={handleChange} className="block w-[350px] h-[35px] lg:w-[550px] mt-2 border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900  focus:ring-purple-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:placeholder-gray-400 dark:focus:border-gray-500 dark:focus:ring-gray-500 p-2.5 text-sm pr-10 rounded-lg" type="text" id='username' defaultValue={currentUser.username} placeholder="Username..." />
+                          </article>
+                          <article>
+                            <label className='dark:text-gray-200 '>Email</label>
+                            <input autoComplete='off' onChange={handleChange} className="block w-[350px] h-[35px] lg:w-[550px] mt-2 border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900  focus:ring-purple-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:placeholder-gray-400 dark:focus:border-gray-500 dark:focus:ring-gray-500 p-2.5 text-sm pr-10 rounded-lg" type="email" id='email' defaultValue={currentUser.email} placeholder="eg: name@gmail.com" />
+                          </article>
+                          <article>
+                            <label className='dark:text-gray-200'>Password</label>
+                            <input autoComplete='off' onChange={handleChange} className="block w-[350px] h-[35px] lg:w-[550px] border mt-2 disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900  focus:ring-purple-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:placeholder-gray-400 dark:focus:border-gray-500 dark:focus:ring-gray-500 p-2.5 text-sm pr-10 rounded-lg" type="password" id='password' placeholder=" New Password..." />
+                          </article> 
+                          <article>
+                              <button onClick={()=> console.log('clicked')} type='submit' disabled={buttonBool} class={`inline-flex items-center justify-center h-8 w-[350px] lg:w-[550px] px-10 py-0 text-sm font-semibold text-center bg-sky-600 text-white dark:bg-transparent dark:text-gray-200 no-underline align-middle transition duration-200 ease-in dark:border-2 hover:border-2 dark:border-gray-600 border-gray-300 border-b border-solid rounded-full cursor-pointer select-none hover:bg-transparent dark:hover:text-white dark:hover:border-white hover:border-sky-600 hover:text-sky-600 ${buttonBool && 'bg-opacity-20 dark:text-opacity-15 dark:border-opacity-20 dark:hover:border-white/5 dark:hover:text-white/20'} focus:shadow-xs focus:no-underline`}>
+                                  UPDATE
+                              </button>
+                          </article>
             </div>
         </form>
         <div className='text-red-500 dark:text-gray-200 flex justify-between underline underline-offset-6'>
             <span className='cursor-pointer hover:font-semibold'>Delete Account</span>
             <span className='cursor-pointer hover:font-semibold'>Sign Out</span>
         </div>
+        <article className=' flex justify-center items-center'>
+            {
+              updatingError && 
+              <motion.div variants={fadeIn('left', 0.3)}
+                  initial='hidden'
+                  whileInView={'show'}
+                  viewport={{once: false, amount: 0.3}}   
+                  className='ml-2'>
+                  <div className='w-[350px] lg:w-[550px] text-center font-semibold dark:text-red-500/80 border border-red-600 bg-red-800/20 text-red-600 py-1 dark:border-none dark:bg-black/40 p-2 text-[13px] mt-6 rounded-full'>
+                  {updatingError}
+                  </div>
+                  </motion.div>
+            }
+            {
+              updatingSuccess && 
+              <motion.div variants={fadeIn('left', 0.3)}
+                  initial='hidden'
+                  whileInView={'show'}
+                  viewport={{once: false, amount: 0.3}}   
+                  className='ml-2'>
+                  <div className='text-center font-semibold dark:text-green-500/80 border-b bg-green-300 text-green-600 border-green-600 py-1 dark:border-none dark:bg-green/40 p-2 text-[13px] mt-6 rounded-full w-[350px] lg:w-[550px]'>
+                  {updatingSuccess}
+                  </div>
+                  </motion.div>
+            }
+        </article>
     </div>
   )
 }

@@ -13,7 +13,7 @@ function Header() {
   const {theme} = useSelector(state => state.theme);
   const {currentUser} = useSelector(state => state.user);
   return (
-    <nav className='fixed top-0 w-full bg-white px-2 py-2.5 dark:border-b dark:border-[rgb(35,39,42)] dark:bg-[rgb(35,39,42)] sm:px-4 border-b-2'>
+    <nav className=' z-50 fixed top-0 w-full bg-white px-2 py-2.5 dark:border-b dark:border-[rgb(35,39,42)] dark:bg-[rgb(35,39,42)] sm:px-4 border-b-2'>
       <div className='mx-auto flex flex-wrap items-center justify-between container'>
         <Link to='/'>
           <img src={logo1} className='w-[120px] h-[40px] '/>
@@ -45,7 +45,7 @@ function Header() {
               {
                 currentUser ? 
               ( <div className='group cursor-pointer relative'>
-                  <img className='w-[40px] border-2 dark:border-gray-600 rounded-full' src={currentUser.photoUrl} />
+                  <img className='w-[40px] h-[40px] border-2 dark:border-gray-600 rounded-full' src={currentUser.photoUrl} />
                   <div className='flex flex-col py-2 dark:bg-[rgb(44,47,51)] px-2 absolute right-4 top-10 bg-white rounded-lg group-hover:visible invisible w-[150px] md:w-[250px] h-[140px] border-2 text-center'>
                     <span className='text-sm text-gray-900 dark:text-white'>@{currentUser.username}</span>
                     <span className='text-sm font-semibold truncate'>{currentUser.email}</span>
