@@ -5,7 +5,7 @@ import {app} from '../firebase';
 import {motion} from 'framer-motion';
 import { fadeIn } from '../variants';
 import { CircularProgressbar } from 'react-circular-progressbar';
-import { updateStart, updateFailure,updateSuccess, deleteFailure, deleteStart, deleteSuccess } from '../redux/user/userSlice';
+import { updateStart, updateFailure,updateSuccess, deleteFailure, deleteStart, deleteSuccess, signOutSuccess } from '../redux/user/userSlice';
 import 'react-circular-progressbar/dist/styles.css';
 import { useNavigate } from 'react-router-dom';
 function DashProfile() {
@@ -104,7 +104,7 @@ function DashProfile() {
       }
     }
 
-    const handleDelete=async (e)=>{
+    const handleDelete=async ()=>{
       setModal(false);
       try {
         dispatch(deleteStart())
@@ -125,6 +125,24 @@ function DashProfile() {
       }
     }
     
+    const handleSignout=async()=>{
+      try {
+        const res = await fetch("/api/user/signout",{
+          method : 'POST'
+        })
+        const data = await res.json();
+        if(!res.ok){
+          console.log(data.message)
+        }
+        else{
+          dispatch(signOutSuccess(data))
+        }
+        
+      } catch (error) {
+        console.log(error);
+      }
+    
+    }
 
   return (
     <div className='lg:pt-20 max-w-xl p-3 mx-auto w-full'>
@@ -191,7 +209,7 @@ function DashProfile() {
         </form>
         <div className='text-red-500 dark:text-gray-200 flex justify-between underline underline-offset-6'>
             <span onClick={()=>{setModal(true)}} className='cursor-pointer hover:font-semibold'>Delete Account</span>
-            <span className='cursor-pointer hover:font-semibold'>Sign Out</span>
+            <span onClick={handleSignout} className='cursor-pointer hover:font-semibold'>Sign Out</span>
         </div>
         <article className=' flex justify-center items-center'>
             {
