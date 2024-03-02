@@ -72,10 +72,16 @@ function Header() {
                     <Link className='mt-2 border-2 border-blue-500 bg-blue-500 dark:hover:bg-black/20 dark:border-gray-600 dark:bg-transparent dark:bg-gray-600 font-semibold focus:outline-none focus:ring-1 focus:ring-blue-300 hover:bg-blue-600 text-white rounded-full' to="/dashboard?tab=profile">
                       Profile
                     </Link>
-                    <Link onClick={handleSignout} className='hover:text-blue-500 py-[1.5px] dark:py-[0px] hover:py-[2px] dark:border-gray-600 dark:hover:border-[2px] dark:hover:text-white dark:text-gray-200 dark:hover:border-white dark:bg-sky-600 hover:bg-white mt-2 border-2 text-white hover:border-blue-500 bg-blue-500  transition delay-55 ease-in-out duration-200  font-semibold rounded-full'>
+                    <Link className='hover:text-blue-500 py-[1.5px] dark:py-[0px] hover:py-[2px] dark:border-gray-600 dark:hover:border-[2px] dark:hover:text-white dark:text-gray-200 dark:hover:border-white dark:bg-sky-600 hover:bg-white mt-2 border-2 text-white hover:border-blue-500 bg-blue-500  transition delay-55 ease-in-out duration-200  font-semibold rounded-full' to="/dashboard">
                       Logout
                     </Link>
                   </div>
+                </div>)
+                 :
+                (<div className='bg-gradient-to-br from-purple-600 to-cyan-500 rounded-full'>  
+                  <Link to='sign-in'>
+                  <button type="button" className="group rounded-full flex m-0.5 text-black items-center justify-center text-center font-medium relative focus:z-10 focus:outline-none hover:text-white bg-gradient-to-br from-white to-white hover:from-purple-600 hover:to-cyan-500  dark:focus:ring-cyan-800 focus:ring-2"><span className="flex items-center transition-all duration-200 rounded-md text-sm px-4 py-2">Sign In</span></button>
+                  </Link>
                 </div>)
               }
 
