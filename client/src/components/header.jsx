@@ -65,14 +65,14 @@ function Header() {
               {
                 currentUser ? 
               ( <div className='group cursor-pointer relative'>
-                  <img className='w-[40px] h-[40px] border-2 dark:border-gray-600 rounded-full' src={currentUser.profilePicture} />
+                  <img className='w-[40px] h-[40px] border-2 dark:border-gray-600 rounded-full' src={currentUser.photoUrl} />
                   <div className='flex flex-col py-2 px-2 absolute right-4 top-10 bg-white dark:bg-[rgb(35,39,42)] rounded-lg group-hover:visible invisible w-[150px] md:w-[250px] h-[140px] border-2 dark:border-gray-600 text-center'>
                     <span className='text-sm text-gray-900 dark:text-gray-400'>@{currentUser.username}</span>
                     <span className='text-sm font-semibold truncate dark:text-gray-200 text-gray-800'>{currentUser.email}</span>
                     <Link className='mt-2 border-2 border-blue-500 bg-blue-500 dark:hover:bg-black/20 dark:border-gray-600 dark:bg-transparent dark:bg-gray-600 font-semibold focus:outline-none focus:ring-1 focus:ring-blue-300 hover:bg-blue-600 text-white rounded-full' to="/dashboard?tab=profile">
                       Profile
                     </Link>
-                    <Link className='hover:text-blue-500 py-[1.5px] dark:py-[0px] hover:py-[2px] dark:border-gray-600 dark:hover:border-[2px] dark:hover:text-white dark:text-gray-200 dark:hover:border-white dark:bg-sky-600 hover:bg-white mt-2 border-2 text-white hover:border-blue-500 bg-blue-500  transition delay-55 ease-in-out duration-200  font-semibold rounded-full' to="/dashboard">
+                    <Link onClick={handleSignout} className='hover:text-blue-500 py-[1.5px] dark:py-[0px] hover:py-[2px] dark:border-gray-600 dark:hover:border-[2px] dark:hover:text-white dark:text-gray-200 dark:hover:border-white dark:bg-sky-600 hover:bg-white mt-2 border-2 text-white hover:border-blue-500 bg-blue-500  transition delay-55 ease-in-out duration-200  font-semibold rounded-full' to="/dashboard">
                       Logout
                     </Link>
                   </div>
