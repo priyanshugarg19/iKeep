@@ -1,3 +1,90 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body{
+    height: 100vh;
+}
+
+.ql-editor{
+    font-size: 1.05rem;
+}
+
+.quill {
+    border-radius: 10px; /* Adjust the border-radius value to your preference */
+    border: 1px solid #0000; /* Optional: Add a border for better visibility */
+    padding: 10px; /* Optional: Add padding to the editor */
+  }
+  
+  /* Style the editor area */
+.ql-editor { /* Same border-radius as parent for consistency */
+    background-color: white; /* Same background color as parent */
+    color: black;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
+  
+  /* Style the toolbar */
+.dark .ql-toolbar {
+    border-top-left-radius: 10px; /* Match parent's border-radius for consistency */
+    border-top-right-radius: 10px; /* Match parent's border-radius for consistency */ /* Same background color as parent */
+    background-color: transparent;
+    color: black !important;
+  }
+
+
+input {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.10), 0 6px 20px 0 rgba(0, 0, 0, 0.08);
+
+}
+
+.inputheader {
+    box-shadow: none;
+
+}
+
+select {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.10), 0 6px 20px 0 rgba(0, 0, 0, 0.08);
+
+}
+
+.light .ql-toolbar {
+    border-top-left-radius: 10px; /* Match parent's border-radius for consistency */
+    border-top-right-radius: 10px; /* Match parent's border-radius for consistency */ /* Same background color as parent */
+    background-color: rgb(87, 157, 248);
+    color:black
+  }
+
+
+  
+.ql-toolbar button {
+    color: white !important; /* Set button text color to white */
+}
+.ql-toolbar .ql-stroke {
+    fill: none;
+    stroke: #fff;
+}
+
+.ql-toolbar .ql-fill {
+    fill: #fff;
+    stroke: none;
+}
+
+.dark .ql-toolbar .ql-picker {
+    color: black;
+    font-weight: bold;
+    background-color: gray;
+    border-radius: 10px;
+}
+
+.light .ql-toolbar .ql-picker {
+    color: black;
+    font-weight: bold;
+    background-color: white;
+    border-radius: 10px;
+}
+
+@media screen and (min-width: 720px) {
+    .formmm{
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.2);
+    }
+  }

@@ -39,7 +39,7 @@ function SignIn() {
       }
     }
     catch(err){
-      dispatch(signInFailure(err.message));
+      dispatch(signInFailure(err));
     }
   }
   
@@ -73,7 +73,7 @@ function SignIn() {
                     <a href='/'>Home</a>
                     <a href='/sign-in'>SignIn</a>
                     <a href='/sign-up'>SignUp</a>
-                    <a href='/dashboard'>Contact</a>
+                    <a href='/contact'>Contact</a>
                 </nav>
                 <div className='flex justify-center items-center mt-[29%] pr-20'>
                   <form onSubmit={handleSubmit} className=' w-[320px] h-[320px] '>

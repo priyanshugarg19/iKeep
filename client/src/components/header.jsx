@@ -42,7 +42,7 @@ function Header() {
           <div className="hidden lg:inline">
             <div className="relative w-full">
               <div data-testid="right-icon" className="pointer-events-none absolute  inset-y-0 right-0 flex items-center pr-3 h-5 w-5 text-gray-500 dark:text-gray-400" height="1em" width="1em" ></div>
-                <input className="block w-full border caret-cyan-500 disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900  focus:ring-purple-500 dark:border-gray-600 dark:bg-[rgb(44,47,51)] dark:text-white dark:placeholder-gray-400 dark:focus:border-gray-500 dark:caret-gray-200 dark:focus:ring-gray-500 p-2.5 text-sm pr-10 rounded-lg" type="text" placeholder="Search..." />
+                <input className="inputheader block w-full border caret-cyan-500 disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900  focus:ring-purple-500 dark:border-gray-600 dark:bg-[rgb(44,47,51)] dark:text-white dark:placeholder-gray-400 dark:focus:border-gray-500 dark:caret-gray-200 dark:focus:ring-gray-500 p-2.5 text-sm pr-10 rounded-lg" type="text" placeholder="Search..." />
                 <AiOutlineSearch className='absolute top-3 right-3 dark:text-gray-300' />
             </div>
           </div>

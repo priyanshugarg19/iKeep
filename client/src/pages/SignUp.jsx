@@ -71,9 +71,9 @@ function SignUp() {
               className='flex-1 bg-black bg-opacity-90 flex-col ease-in duration-75'>
                 <nav className='text-white text-[13px] lg:text-[20px] opacity-80 flex justify-evenly mt-8'>
                     <a href='/'>Home</a>
-                    <a href='/dashboard'>SignIn</a>
+                    <a href='/sign-in'>SignIn</a>
                     <a href='/sign-up'>SignUp</a>
-                    <a href='/dashboard'>Contact</a>
+                    <a href='/contact'>Contact</a>
                 </nav>
                 <div className='flex justify-center items-center mt-[29%] pr-20'>
                   <form onSubmit={handleSubmit} className=' w-[320px] h-[320px] '>

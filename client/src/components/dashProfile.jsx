@@ -7,7 +7,7 @@ import { fadeIn } from '../variants';
 import { CircularProgressbar } from 'react-circular-progressbar';
 import { updateStart, updateFailure,updateSuccess, deleteFailure, deleteStart, deleteSuccess, signOutSuccess } from '../redux/user/userSlice';
 import 'react-circular-progressbar/dist/styles.css';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 function DashProfile() {
     const navigate= useNavigate()
     const dispatch= useDispatch()
@@ -204,6 +204,18 @@ function DashProfile() {
                               <button onClick={()=> console.log('clicked')} type='submit' disabled={buttonBool} class={`inline-flex items-center justify-center h-8 w-[350px] lg:w-[550px] px-10 py-0 text-sm font-semibold text-center bg-sky-600 text-white dark:bg-transparent dark:text-gray-200 no-underline align-middle transition duration-200 ease-in dark:border-2 hover:border-2 dark:border-gray-600 border-gray-300 border-b border-solid rounded-full cursor-pointer select-none hover:bg-transparent dark:hover:text-white dark:hover:border-white hover:border-sky-600 hover:text-sky-600 ${buttonBool && 'bg-opacity-20 dark:text-opacity-15 dark:border-opacity-20 dark:hover:border-white/5 dark:hover:text-white/20'} focus:shadow-xs focus:no-underline`}>
                                   UPDATE
                               </button>
+                          </article>
+                          <article>
+                              {
+                                currentUser.isAdmin && (
+                                  <Link to="/createPost">
+                                  <button className={`inline-flex items-center justify-center h-8 w-[350px] lg:w-[550px] px-10 py-0 text-sm font-semibold text-center bg-sky-600 text-white dark:bg-transparent dark:text-gray-200 no-underline align-middle transition duration-200 ease-in dark:border-2 hover:border-2 dark:border-gray-600 border-gray-300 border-b border-solid rounded-full cursor-pointer select-none hover:bg-transparent dark:hover:text-white dark:hover:border-white hover:border-sky-600 hover:text-sky-600 ${buttonBool && 'bg-opacity-20 dark:text-opacity-15 dark:border-opacity-20 dark:hover:border-white/5 dark:hover:text-white/20'} focus:shadow-xs focus:no-underline`}>
+                                    Create a post
+                                  </button>
+
+                                  </Link>
+                                )
+                              }
                           </article>
             </div>
         </form>
