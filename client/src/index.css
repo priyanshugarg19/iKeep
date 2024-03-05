@@ -4,6 +4,11 @@
 
 body{
     height: 100vh;
+    -ms-overflow-style: none;  
+    scrollbar-width: 0;
+}
+body::-webkit-scrollbar {
+    display: none;
 }
 
 .ql-editor{
