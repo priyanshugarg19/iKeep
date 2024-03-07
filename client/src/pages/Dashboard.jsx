@@ -1,42 +1,40 @@
-import {React, useState, useEffect } from 'react';
+import {React, useState, useEffect} from 'react';
 import Header from '../components/header';
-import DashProfile from '../components/dashProfile';
-import DashSidebar from '../components/dashSidebar';
 import { useLocation } from 'react-router-dom';
-
-
-
-
+import DashProfile from '../components/dashProfile';
+import DashSidebar from '../components/DashSidebar';
+import DashPosts from '../components/DashPosts';
 function Dashboard() {
-  const [tab , setTab]= useState("");
-  const location= useLocation();
-  
-  useEffect(()=>{
+  const location = useLocation();
+  const [tab, setTab] = useState('');
 
-    const params= new URLSearchParams(location.search);
-    const urlFromTabs = params.get('tab');
-    if(urlFromTabs){
-      setTab(urlFromTabs)
+  useEffect(()=> {
+    const params = new URLSearchParams(location.search);
+    const tabsFromUrl = params.get('tab');
+    if(tabsFromUrl){
+      setTab(tabsFromUrl);
     }
-
-  },[location.search])
+  }, [location.search])
 
 
   return (
+
     <>
-      <Header />
-
+    <Header />
+      {/* sidebar */}
       <div className='min-h-screen flex flex-col lg:flex-row'>
-      <div>
-
-        <DashSidebar />
-
-      </div>
-      <div className=' w-full min-h-[700px] lg:min-h-screen'>
-
-        {tab==='profile' && <DashProfile />}
-
-      </div>
+        <div>
+          <DashSidebar />
+        </div>
+        {/* profile */}
+        <div className='w-full min-h-[700px] lg:min-h-screen'>
+          {
+            tab === 'profile' && <DashProfile />
+          }
+          {
+            tab === 'posts' && <DashPosts />
+          }
+        </div>
       </div>
     </>
   )

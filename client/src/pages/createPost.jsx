@@ -10,6 +10,7 @@ import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import {motion} from 'framer-motion';
 import { fadeIn } from '../variants';
+import { useNavigate } from 'react-router-dom';
 
 function CreatePost() {
     const filePickerRef = useRef();
@@ -17,6 +18,8 @@ function CreatePost() {
     const [imageUploadProgress, setImageUploadProgress] = useState(null);
     const [imageUploadError, setImageUploadError] = useState(null);
     const [formData, setFormData] = useState({});
+    const [publishError, setPublishError] = useState(null);
+    const navigate = useNavigate();
     const uploadImage = async() => {
         try {
             if(!file){
@@ -52,6 +55,28 @@ function CreatePost() {
             console.log(error);
         }
     }
+    console.log(formData);
+    const handleSubmit = async(e) => {
+        e.preventDefault();
+        try {
+            const res = await fetch("/api/post/create", {
+                method: 'POST',
+                headers: {'Content-Type' : 'application/json'},
+                body: JSON.stringify(formData)
+            })
+            const data = await res.json();
+            if(!res.ok){
+                setPublishError(data.message);
+                return;
+            }
+            if(res.ok){
+                setPublishError(null);
+                navigate(`/post/${data.slug}`)
+            }
+        } catch (error) {
+            
+        }
+    }
   return (
     <>
         <Header />
@@ -61,13 +86,13 @@ function CreatePost() {
                         <img className='w-[40px] h-[36px] mr-2' src={newicon} />
                         <h1 className='text-center text-[32px] my-4 font-bold dark:text-white'>CREATE A POST</h1>
                     </div>
-                    <form className='flex flex-col gap-4'>
+                    <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
                         <div className='flex flex-col gap-4 sm:flex-row justify-between'>
                             <div className='shadow-2xl w-full'>
-                                 <input autoComplete='off' className="inputform block w-full h-[35px] mt-2 border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900  focus:ring-sky-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:placeholder-gray-400 dark:focus:border-gray-500 dark:focus:ring-gray-500 p-2.5 text-sm rounded-lg" type="text" id='title' required placeholder="Title" />
+                                 <input onChange={(e)=>setFormData({...formData, title: e.target.value})} autoComplete='off' className="inputform block w-full h-[35px] mt-2 border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900  focus:ring-sky-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:placeholder-gray-400 dark:focus:border-gray-500 dark:focus:ring-gray-500 p-2.5 text-sm rounded-lg" type="text" id='title' required placeholder="Title" />
                             </div>
                             <div className='shadow-2xl'>
-                                <select className='block h-[35px] w-full max-h-60 mt-2 border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900  focus:ring-purple-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 dark:placeholder-gray-400 dark:focus:border-gray-500 dark:focus:ring-gray-500 text-sm pr-10 rounded-lg'>
+                                <select onChange={(e)=>setFormData({...formData, category: e.target.value})} className='block h-[35px] w-full max-h-60 mt-2 border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900  focus:ring-purple-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 dark:placeholder-gray-400 dark:focus:border-gray-500 dark:focus:ring-gray-500 text-sm pr-10 rounded-lg'>
                                         <option value="" disabled selected hidden>Select a category...</option>
                                         <option value="Entertainment">Entertainment</option>
                                         <option value="Gaming">Gaming</option>
@@ -133,12 +158,25 @@ function CreatePost() {
                             formData.image &&
                             (<img src={formData.image} alt='upload' className='w-full h-72 object-cover' />)
                         }
-                        <ReactQuill theme='snow' placeholder='Write something...' required className='h-64 mb-12'/>
+                        <ReactQuill onChange={(value)=>setFormData({...formData, content: value})} theme='snow' placeholder='Write something...' required className='h-64 mb-12'/>
+                        {
+                            publishError &&
+                            <motion.div variants={fadeIn('left', 0.3)}
+                                initial='hidden'
+                                whileInView={'show'}
+                                viewport={{once: false, amount: 0.3}}   
+                                className='ml-2'>
+                                <div className='w-full text-center font-semibold dark:text-red-500/80 border border-red-600 bg-red-800/20 text-red-600 py-1 dark:border-none dark:bg-black/40 p-2 text-[13px] rounded-full'>
+                                {publishError}
+                                </div>
+                            </motion.div>
+                        }
                         <div className='flex justify-center items-center mt-6 md:mt-0'>    
-                        <button onClick={()=> console.log('clicked')} type='button' class={`inline-flex items-center justify-center h-8 w-[190px] lg:w-[190px] px-10 py-0 text-sm font-semibold text-center hover:bg-sky-600  bg-sky-600 text-gray-200 no-underline align-middle transition duration-200 ease-in border-2 border-gray-200  border-solid rounded-full cursor-pointer select-none  hover:text-white hover:border-white  focus:shadow-xs focus:no-underline`}>
+                        <button onClick={()=> console.log('clicked')} type='submit' class={`inline-flex items-center justify-center h-8 w-[190px] lg:w-[190px] px-10 py-0 text-sm font-semibold text-center hover:bg-sky-600  bg-sky-600 text-gray-200 no-underline align-middle transition duration-200 ease-in border-2 border-gray-200  border-solid rounded-full cursor-pointer select-none  hover:text-white hover:border-white  focus:shadow-xs focus:no-underline`}>
                                   CREATE A POST
                                   </button> 
                         </div>
+                        
                     </form>
 
                 </div>  
