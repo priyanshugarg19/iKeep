@@ -9,7 +9,8 @@ import Dashboard from './pages/Dashboard';
 import Header from './components/header';
 import PrivateRoute from './components/privateRoute';
 import AdminPrivateRoute from './components/adminPrivateRoute';
-import CreatePost from './pages/createPost';
+import CreatePost from './pages/CreatePost';
+import UpdatePost from './pages/UpdatePost';
 const App = () => {
   // const location = useLocation();
 
@@ -25,7 +26,8 @@ const App = () => {
         <Route path="/projects" element={<Projects />} />
         <Route path='/about' element={<About />} />
         <Route element={<AdminPrivateRoute />}>
-          <Route path= "/createPost" element={<CreatePost />} />
+          <Route path= "/CreatePost" element={<CreatePost />} />
+          <Route path= "/UpdatePost/:postId" element={<UpdatePost />} />
         </Route>
       </Routes>
     </BrowserRouter>

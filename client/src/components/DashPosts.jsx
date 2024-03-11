@@ -125,7 +125,7 @@ function DashPosts() {
                                 <a onClick={(e)=>{e.preventDefault(); setShowModals(true); setPostId(currElem._id);}} href="#" class="font-medium text-red-500 dark:text-red-500 hover:underline">Delete</a>
                             </td>
                             <td class="px-6 py-4">
-                              <Link to={`/update-post/${currElem._id}`}>
+                              <Link to={`/UpdatePost/${currElem._id}`}>
                                 <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
                               </Link>
                             </td>
