@@ -74,3 +74,35 @@ export const signOut = async (req,res,next)=>{
         next(error);
     }
 }
+
+export const getUser=async(req, res, next )=>{
+    if(!req.user.isAdmin){
+        next(errorHandler(401, 'not authorized'));
+    }
+    try {
+        const startIndex = (req.query.startIndex) || 0
+        const limit =parseInt(req.query.limit) || 9;
+        const sortDirection = (req.query.sortDirection== 'asc' ? 1 : -1);
+        const users= await User.find({}).sort({updatedAt: sortDirection}).skip(startIndex).limit(limit);
+
+        const usersWithoutPass= users.map((user)=>{
+            const{password, ...rest}= user._doc;
+            return rest;
+        })
+        const now = new Date();
+
+        const oneMonthAgo= new Date(
+            now.getFullYear(),
+            now.getMonth()-1,
+            now.getDate()
+        )
+
+        const lastMonthUser= await User.countDocuments({
+            createdAt:{ $gte : oneMonthAgo}
+        });
+        const totalUser= await User.countDocuments();
+        res.status(200).json({usersWithoutPass, totalUser, lastMonthUser});
+    } catch (error) {
+        next(error);
+    }
+}
