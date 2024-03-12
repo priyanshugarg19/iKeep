@@ -1,9 +1,11 @@
 import Post from "../models/postModel.js";
+import User from "../models/userModel.js";
 import { errorHandler } from "../utils/errorHandler.js"
 
 
 export const create = async(req, res, next)=>{
-    if(!req.user.isAdmin){
+    const valid =await User.findOne({_id: req.user.id});
+    if(!req.user.isAdmin || valid==null){
         return next(errorHandler(400,"You are not authorized to create post"));
     }
     if (!req.body.title || !req.body.content) {
@@ -15,10 +17,12 @@ export const create = async(req, res, next)=>{
     });
     try {
         const savedPost= await newPost.save();
+        console.log(valid);
         res.status(200).json(savedPost);
     } catch (error) {
         next(error)
     }
+    
 }
 
 
@@ -44,7 +48,7 @@ export const getPosts= async(req,res,next)=>{
         ).sort({updatedAt: sortDirection}).skip(startIndex).limit(limit);
 
         const totalposts= await Post.countDocuments();
-
+        const userTotalPost = await Post.find({userId: req.params.userId})
         const now = new Date();
 
         const oneMonthAgo= new Date(
@@ -58,7 +62,7 @@ export const getPosts= async(req,res,next)=>{
         });
 
         res.status(200).json({
-            posts, totalposts, lastMonthPosts
+            posts, totalposts, lastMonthPosts, userTotalPost
         })
     } catch (error) {
         next(error)

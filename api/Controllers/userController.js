@@ -1,5 +1,6 @@
 import { errorHandler } from "../utils/errorHandler.js";
 import User from "../models/userModel.js";
+import Post from "../models/postModel.js";
 import bcryptjs from 'bcryptjs';
 
 
@@ -83,7 +84,7 @@ export const getUser=async(req, res, next )=>{
         const startIndex = (req.query.startIndex) || 0
         const limit =parseInt(req.query.limit) || 9;
         const sortDirection = (req.query.sortDirection== 'asc' ? 1 : -1);
-        const users= await User.find({}).sort({updatedAt: sortDirection}).skip(startIndex).limit(limit);
+        const users= await User.find({}).sort({createdAt: 1}).skip(startIndex).limit(limit);
 
         const usersWithoutPass= users.map((user)=>{
             const{password, ...rest}= user._doc;
@@ -102,6 +103,38 @@ export const getUser=async(req, res, next )=>{
         });
         const totalUser= await User.countDocuments();
         res.status(200).json({usersWithoutPass, totalUser, lastMonthUser});
+    } catch (error) {
+        next(error);
+    }
+}
+
+export const adminDel= async(req,res,next)=>{
+    if(req.user.id !== req.params.userid){
+        next(errorHandler(401,"you are not authorized to delete user"))
+    }
+    try {
+        await User.findByIdAndDelete(req.params.usertodel);
+        await Post.deleteMany({ userId: req.params.usertodel});
+
+        res.status(200).json('User has been deleted');
+
+    } catch (error) {
+        next(error);
+    }
+}
+
+export const validUser = async(req, res, next)=>{
+    try {
+        const user =await User.findById( req.user.id);
+        
+        if(req.user.id !== user._id.toString()){
+            console.log(req.user.id, user._id.toString());
+            res.clearCookie('access_token').status(200).json("User has been signed Out");
+        }else {
+            const validUser = true;
+            res.status(200).json(validUser);
+            
+        }
     } catch (error) {
         next(error);
     }

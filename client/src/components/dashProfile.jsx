@@ -136,6 +136,7 @@ function DashProfile() {
         }
         else{
           dispatch(signOutSuccess(data))
+          navigate('/sign-in');
         }
         
       } catch (error) {
