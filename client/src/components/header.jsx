@@ -80,7 +80,7 @@ function Header() {
                 </div>)
                  :
                 (<div className='bg-gradient-to-br from-purple-600 to-cyan-500 rounded-full'>  
-                  <Link to='sign-in'>
+                  <Link to='/sign-in'>
                   <button type="button" className="group rounded-full flex m-0.5 text-black items-center justify-center text-center font-medium relative focus:z-10 focus:outline-none hover:text-white bg-gradient-to-br from-white to-white hover:from-purple-600 hover:to-cyan-500  dark:focus:ring-cyan-800 focus:ring-2"><span className="flex items-center transition-all duration-200 rounded-md text-sm px-4 py-2">Sign In</span></button>
                   </Link>
                 </div>)
