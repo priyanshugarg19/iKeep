@@ -4,11 +4,13 @@
 
 body{
     height: 100vh;
-    -ms-overflow-style: none;  
     scrollbar-width: 0;
 }
+
 body::-webkit-scrollbar {
     display: none;
+    -ms-overflow-style: none;
+    scrollbar-width: none; 
 }
 
 .ql-editor{
@@ -93,3 +95,55 @@ select {
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.2);
     }
   }
+
+  .no-scrollbar{
+    scrollbar-width: 0;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+    -ms-overflow-style: none;
+    scrollbar-width: none; 
+}
+
+.post-content p{
+    margin-bottom: 0.1rem;
+}
+
+.post-content h1{
+    font-size: 1.5rem;
+    font-weight: 600;
+    font-family: sans-serif;
+    margin: 1.5rem 0;
+}
+
+.post-content h2{
+    font-size: 1.4rem;
+    font-weight: 500;
+    font-family: sans-serif;
+    margin: 1.5rem 0;
+}
+
+.post-content a{
+    color: rgb(73, 149, 199);
+    text-decoration: none;
+}
+
+.post-content a:hover{
+    text-decoration: underline;
+}
+
+.post-content ul {
+    list-style-type: disc; /* Set bullet style */
+    margin-left: 40px; /* Add some indentation */
+}
+
+/* Style for the list items */
+.post-content li {
+    font-size: 1rem; /* Optional: Adjust font size */
+}
+
+.post-content h3{
+    background-color: #23272a;
+    padding: 1rem;
+}
