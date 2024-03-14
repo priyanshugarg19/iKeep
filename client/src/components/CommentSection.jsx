@@ -108,7 +108,7 @@ function CommentSection({postId}) {
                 </div>
                 <div className='flex-1'>
                     <div className='flex items-center mb-1'>
-                        <span className='font-bold mr-1 text-xs truncate'>{currentUser ? @${currentUser.username} : "Sign In"}</span>
+                        <span className='font-bold mr-1 text-xs truncate'>{currentUser ? `@${currentUser.username}` : "Sign In"}</span>
                     </div>
                     <p className='text-gray-500 dark:text-gray-500 pb-2'>Be the first one to comment...</p>
                 </div>
