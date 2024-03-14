@@ -61,7 +61,7 @@ function PostPage() {
 
         </div>
         <div>
-            <CommentSection />
+            <CommentSection postId={post._id}/>
         </div>
     </main>
     </>

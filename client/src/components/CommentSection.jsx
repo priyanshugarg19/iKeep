@@ -5,9 +5,37 @@ import { Link } from 'react-router-dom';
 function CommentSection({postId}) {
     const {currentUser} = useSelector((state)=>state.user);
     const [comment, setComment] = useState('');
+    const [errorHandle, setErrorHandle] = useState(null);
 
     const handleSubmit = async(e)=>{
         e.preventDefault();
+        if(comment.length> 200){
+            setErrorHandle("Limit Exceeded");
+            return;
+        }
+
+        try {
+            const res=await fetch('/api/comment/create',{
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({
+                    content : comment,
+                    userId: currentUser._id,
+                    postId
+                })
+            })
+            const data= await res.json();
+            if(!res.ok){
+                setErrorHandle(data.message);
+            }
+            else{
+                console.log(data.message);
+                setComment('');
+            }
+            
+        } catch (error) {
+            console.log(error);
+        }
     }
 
   return (
