@@ -1,11 +1,14 @@
+import { useEffect } from 'react';
 import {React, useState} from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import Comment from './Comment';
 
 function CommentSection({postId}) {
     const {currentUser} = useSelector((state)=>state.user);
     const [comment, setComment] = useState('');
     const [errorHandle, setErrorHandle] = useState(null);
+    const [comments, setComments] = useState([]);
 
     const handleSubmit = async(e)=>{
         e.preventDefault();
@@ -31,12 +34,34 @@ function CommentSection({postId}) {
             else{
                 console.log(data.message);
                 setComment('');
+                setComments([data, ...comments])
+                setErrorHandle(null);
             }
             
         } catch (error) {
             console.log(error);
         }
     }
+
+    useEffect(()=>{
+        const getComments= async()=>{
+            try {
+                const res = await fetch(`/api/comment/getcomments/${postId}`);
+                const data = await res.json();
+
+                if(!res.ok){
+                    console.log(data.message);
+                }
+                else{
+                    setComments(data);
+                    
+                }
+            } catch (error) {
+                
+            }
+        } 
+        getComments()
+    },[postId])
 
   return (
     <div className='max-w-2xl mx-auto w-full p-3'>
@@ -76,6 +101,31 @@ function CommentSection({postId}) {
                 </div>
             </form>
         }
+        {comments.length==0 ? (
+            <div className='flex p-4 border-b dark:border-gray-600 text-sm'>
+                <div className='flex-shrink-0 mr-3'>
+                    <img className='2-10 h-10 rounded-full bg-gray-200 dark:bg-gray-600' src={currentUser.photoUrl} alt="user"  />
+                </div>
+                <div className='flex-1'>
+                    <div className='flex items-center mb-1'>
+                        <span className='font-bold mr-1 text-xs truncate'>{currentUser ? @${currentUser.username} : "Sign In"}</span>
+                    </div>
+                    <p className='text-gray-500 dark:text-gray-500 pb-2'>Be the first one to comment...</p>
+                </div>
+                </div>
+        ): (
+            <>
+                <div className='text-sm my-5 flex items-center gap-2'>
+                    <p>Comments</p>
+                    <div className='border border-gray-400 dark:border-gray-600 py-1 px-2 rounded-md'>
+                        <p>{comments.length}</p>
+                    </div>
+                </div>
+               {comments.map((currElem)=>{
+                return (<Comment key={currElem._id} comment={currElem} />)
+                })} 
+            </>
+        )}
     </div>
   )
 }

@@ -76,7 +76,7 @@ export const signOut = async (req,res,next)=>{
     }
 }
 
-export const getUser=async(req, res, next )=>{
+export const getUsers=async(req, res, next )=>{
     if(!req.user.isAdmin){
         next(errorHandler(401, 'not authorized'));
     }
@@ -138,4 +138,17 @@ export const validUser = async(req, res, next)=>{
     } catch (error) {
         next(error);
     }
+}
+
+export const getUser =async (req,res,next)=>{
+try {
+    const user =await User.findById(req.params.userId);
+    if(!user){
+        next(errorHandler(400, "User not found"))
+    };
+    const {password, ...rest} = user._doc;
+    res.status(200).json(rest);
+} catch (error) {
+    next(error);
+}
 }
