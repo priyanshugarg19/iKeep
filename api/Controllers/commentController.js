@@ -40,7 +40,7 @@ export const getComments =async (req, res, next)=>{
 
 export const likeComment = async (req, res, next)=>{
     try {
-        const comment = await Comment.findById(req.params.id);
+        const comment = await Comment.findById(req.params.commentid);
         if(!comment){
             next(errorHandler(404, "Comment not found"));
         }
