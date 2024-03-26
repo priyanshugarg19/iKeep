@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import {React, useState} from 'react';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link , useNavigate} from 'react-router-dom';
 import Comment from './Comment';
 
 function CommentSection({postId}) {
@@ -9,7 +9,7 @@ function CommentSection({postId}) {
     const [comment, setComment] = useState('');
     const [errorHandle, setErrorHandle] = useState(null);
     const [comments, setComments] = useState([]);
-
+    const navigate = useNavigate();
     const handleSubmit = async(e)=>{
         e.preventDefault();
         if(comment.length> 200){
@@ -48,7 +48,6 @@ function CommentSection({postId}) {
             try {
                 const res = await fetch(`/api/comment/getcomments/${postId}`);
                 const data = await res.json();
-
                 if(!res.ok){
                     console.log(data.message);
                 }
@@ -62,6 +61,31 @@ function CommentSection({postId}) {
         } 
         getComments()
     },[postId])
+
+    const handleLike= async(commentId)=>{
+        try {
+            if(!currentUser){
+                navigate("/sign-in");
+                return;
+            }
+            const res= await fetch(`/api/comment/Commentlike/${commentId}`,{
+                method : "PUT"
+            })
+            if(res.ok){
+                const data =await res.json();
+                setComments(comments.map(comment=>
+                    comment._id === commentId ? {
+                        ...comment,
+                        likes: data.likes,
+                        numberOfLikes: data.likes.length,
+                    } : comment
+                ))
+                
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
   return (
     <div className='max-w-2xl mx-auto w-full p-3'>
@@ -104,7 +128,7 @@ function CommentSection({postId}) {
         {comments.length==0 ? (
             <div className='flex p-4 border-b dark:border-gray-600 text-sm'>
                 <div className='flex-shrink-0 mr-3'>
-                    <img className='2-10 h-10 rounded-full bg-gray-200 dark:bg-gray-600' src={currentUser.photoUrl} alt="user"  />
+                    <img className='2-10 h-10 rounded-full bg-gray-200 dark:bg-gray-600' src={currentUser?.photoUrl} alt="user"  />
                 </div>
                 <div className='flex-1'>
                     <div className='flex items-center mb-1'>
@@ -122,7 +146,7 @@ function CommentSection({postId}) {
                     </div>
                 </div>
                {comments.map((currElem)=>{
-                return (<Comment key={currElem._id} comment={currElem} />)
+                return (<Comment key={currElem._id} comment={currElem} onLike={handleLike}  />)
                 })} 
             </>
         )}
