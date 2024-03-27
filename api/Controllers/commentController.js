@@ -69,10 +69,10 @@ export const editComment= async(req, res, next)=>{
         if (comment.userId !== req.user.id) {
             next(errorHandler(401, " Unauthorized to edit Commnet"))
         } else {
-            const editedCommnet = Comment.findByIdAndUpdate(req.params.commentid, {
+            const editedComment =await Comment.findByIdAndUpdate(req.params.commentid, {
                 content : req.body.content,
             },{new : true})
-            res.status(200).json(editedCommnet);
+            res.status(200).json(editedComment);
         }
     } catch (error) {
         next(error);

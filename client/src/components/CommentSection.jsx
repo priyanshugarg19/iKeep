@@ -87,6 +87,17 @@ function CommentSection({postId}) {
         }
     };
 
+    const handleEdit= async(comment, editedComment)=>{
+        try {
+            setComments(comments.map((c)=>
+            c._id == comment._id ? ({...c, content: editedComment}) : c ));
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+
   return (
     <div className='max-w-2xl mx-auto w-full p-3'>
         {
@@ -146,7 +157,7 @@ function CommentSection({postId}) {
                     </div>
                 </div>
                {comments.map((currElem)=>{
-                return (<Comment key={currElem._id} comment={currElem} onLike={handleLike}  />)
+                return (<Comment key={currElem._id} comment={currElem} onLike={handleLike} onEdit={handleEdit} />)
                 })} 
             </>
         )}
