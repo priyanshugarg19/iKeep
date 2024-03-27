@@ -59,3 +59,22 @@ export const likeComment = async (req, res, next)=>{
         next(error)
     }
 }
+
+export const editComment= async(req, res, next)=>{
+    try {
+        const comment= await Comment.findById(req.params.commentid);
+        if (!comment) {
+            next(errorHandler(404, "Comment not found"));
+        }
+        if (comment.userId !== req.user.id) {
+            next(errorHandler(401, " Unauthorized to edit Commnet"))
+        } else {
+            const editedCommnet = Comment.findByIdAndUpdate(req.params.commentid, {
+                content : req.body.content,
+            },{new : true})
+            res.status(200).json(editedCommnet);
+        }
+    } catch (error) {
+        next(error);
+    }
+}
