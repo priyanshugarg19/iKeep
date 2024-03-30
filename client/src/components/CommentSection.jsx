@@ -159,10 +159,10 @@ function CommentSection({ postId }) {
                     </div>
                 </form>
             }
-            {comments.length == 0 ? (
+            {comments.length == 0 && currentUser ? (
                 <div className='flex p-4 border-b dark:border-gray-600 text-sm'>
                     <div className='flex-shrink-0 mr-3'>
-                        <img className='2-10 h-10 rounded-full bg-gray-200 dark:bg-gray-600' src={currentUser?.photoUrl} alt="user" />
+                        <img className='2-10 h-10 rounded-full bg-gray-200 dark:bg-gray-600' src={currentUser.photoUrl} alt="user" />
                     </div>
                     <div className='flex-1'>
                         <div className='flex items-center mb-1'>
