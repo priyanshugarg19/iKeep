@@ -2,6 +2,7 @@ import { errorHandler } from "../utils/errorHandler.js";
 import User from "../models/userModel.js";
 import Post from "../models/postModel.js";
 import bcryptjs from 'bcryptjs';
+import Comment from "../models/commentModel.js";
 
 
 export default (req, res)=> {
@@ -62,6 +63,7 @@ export const deleteUser = async (req,res,next)=>{
     }
     try {
         await User.findByIdAndDelete(req.params.userid);
+        await Comment.deleteMany({ userId: req.params.userid});
         res.status(200).json('User has been deleted');
     } catch (error) {
         next(error);
@@ -84,7 +86,7 @@ export const getUsers=async(req, res, next )=>{
         const startIndex = (req.query.startIndex) || 0
         const limit =parseInt(req.query.limit) || 9;
         const sortDirection = (req.query.sortDirection== 'asc' ? 1 : -1);
-        const users= await User.find({}).sort({createdAt: 1}).skip(startIndex).limit(limit);
+        const users= await User.find({}).sort({createdAt: sortDirection}).skip(startIndex).limit(limit);
 
         const usersWithoutPass= users.map((user)=>{
             const{password, ...rest}= user._doc;
@@ -115,7 +117,7 @@ export const adminDel= async(req,res,next)=>{
     try {
         await User.findByIdAndDelete(req.params.usertodel);
         await Post.deleteMany({ userId: req.params.usertodel});
-
+        await Comment.deleteMany({ userId: req.params.usertodel});
         res.status(200).json('User has been deleted');
 
     } catch (error) {

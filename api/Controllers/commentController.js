@@ -104,7 +104,7 @@ export const getAllComments = async(req, res, next)=>{
 
         const startIndex = parseInt(req.query.startIndex) || 0;
         const limit = parseInt(req.query.limit) || 10;
-        const sortDirection = req.query.sort == 'desc' ? -1 : 1;
+        const sortDirection = req.query.sort == 'asc' ? 1 : -1;
         const comments = await Comment.find().sort({createdAt : sortDirection}).skip(startIndex).limit(limit);
 
         const totalComments= await Comment.countDocuments();
