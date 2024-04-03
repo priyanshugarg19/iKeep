@@ -120,7 +120,7 @@ function DashComments() {
                             <td class="px-6 py-4">
                                 {currElem.postId}
                             </td>
-                            <td class="px-6 py-4 flex ml-3 mt-3">
+                            <td class="px-6 py-4 ">
                                 {
                                     currElem.userId  
                                 }
@@ -166,7 +166,7 @@ function DashComments() {
                               </svg>
                             </div>
                             <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                              <h3 className="text-base font-semibold leading-6 text-gray-900 dark:text-gray-200" id="modal-title">Delete User</h3>
+                              <h3 className="text-base font-semibold leading-6 text-gray-900 dark:text-gray-200" id="modal-title">Delete Comment</h3>
                               <div className="mt-2">
                                 <p className="text-sm dark:text-gray-400 text-gray-500">Are you sure you want to delete this comment? This action cannot be undone.</p>
                               </div>

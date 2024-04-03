@@ -17,7 +17,6 @@ function PrivateRoute() {
                     console.log(data.message);
                 } else {
                     setValidUser(true);
-                    console.log(data);
                 }
             } catch (error) {
                 console.log(error);
