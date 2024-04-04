@@ -64,7 +64,7 @@ function Header () {
               {
                 currentUser ? 
               ( <div className='group cursor-pointer relative'>
-                  <img className='w-[40px] h-[40px] border-2 dark:border-gray-600 rounded-full' src={currentUser.profilePicture} />
+                  <img className='w-[40px] h-[40px] border-2 dark:border-gray-600 rounded-full' src={currentUser.photoUrl} />
                   <div className='flex flex-col py-2 px-2 absolute right-4 top-10 bg-white dark:bg-[rgb(35,39,42)] rounded-lg group-hover:visible invisible w-[150px] md:w-[250px] h-[140px] border-2 dark:border-gray-600 text-center'>
                     <span className='text-sm text-gray-900 dark:text-gray-400'>@{currentUser.username}</span>
                     <span className='text-sm font-semibold truncate dark:text-gray-200 text-gray-800'>{currentUser.email}</span>
