@@ -1,33 +1,111 @@
-import React from 'react';
-import logo from '../assets/logo.png';
+import React, { useRef, useState, useEffect } from 'react';
+import Header from '../components/header1';
+import { Link } from 'react-router-dom';
+import PostCard from '../components/PostCard';
+import Footer from '../components/footer';
+function Home() {
+  const divRef = useRef(null);
+  const [isHeaderVisible, setIsHeaderVisible] = useState(true);
+  const [prevScrollPos, setPrevScrollPos] = useState(0);
+  const [posts, setPosts] = useState([]);
+  const handleScroll = () => {
+    const currentScrollPos = window.pageYOffset;
+    setIsHeaderVisible(prevScrollPos > currentScrollPos || currentScrollPos === 0);
+    setPrevScrollPos(currentScrollPos);
+  };
 
-const Home = () => {
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [prevScrollPos]);
+
+  const scrollToDiv = () => {
+    if (divRef.current) {
+      divRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+  
+  useEffect(()=>{
+    const fetchPosts = async()=>{
+        try {
+            const res = await fetch("/api/post/getposts");
+            const data = await res.json();
+            if(res.ok){
+                setPosts(data.posts);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    fetchPosts();
+  },[])
+
   return (
-    <div className="h-screen bg-[url('./assets/london.jpg')] bg-cover">
-        <div className='flex h-screen'>
-        {/* left division */}
-            <div className=' flex bg-white bg-opacity-60 justify-center items-center w-[0px] lg:flex-1'>
-                <div>
-                    <img src={logo} />
-                </div>
+    <>
+      <Header isVisible={isHeaderVisible} />
+      <div className="bg-[url('https://images.unsplash.com/photo-1684487747385-442d674962f2')] overscroll-none bg-cover bg-no-repeat bg-center h-screen relative">
+        <div className="bg-black/20 flex justify-center items-center flex-col py-[420px] px-1 md:px-8 text-center relative text-white font-bold text-2xl md:text-3xl overflow-auto h-screen">
+          <h1 className="pb-4">Search for a blog</h1>
+          <div className="w-11/12 md:w-3/4 lg:max-w-3xl m-auto">
+            <div className="relative z-30 text-base text-black">
+              <input type="text" value="" placeholder="Keyword" className="mt-2 shadow-md focus:outline-none rounded-2xl py-3 px-6 block w-full" />
+              <div className="text-left absolute top-10 rounded-t-none rounded-b-2xl shadow bg-white divide-y w-full max-h-40 overflow-auto">
+              </div>
             </div>
-        {/* right division */}
-            <div className='flex-1 bg-black bg-opacity-50 flex-col'>
-                <nav className='text-white text-[13px] lg:text-[20px] opacity-80 flex justify-evenly mt-8'>
-                    <a href='/about'>About</a>
-                    <a href='/sign-in'>SignIn</a>
-                    <a href='/sign-up'>SignUp</a>
-                    <a href='/contact'>Contact</a>
-                </nav>
-                <div className='flex-col mt-[30%] lg:mt-[38%] text-white flex justify-center items-center'>
-                    <h1 className='text-[42px] lg:text-[80px] font-bold '>About Us</h1>
-                    <h3 className='text-center mt-18 lg:px-18 sm:px-8 px-8'>
-                        Welcome to our platform! We are dedicated to providing a space where individuals can effortlessly create their own blogs. Our user-friendly interface allows you to craft engaging content and share your unique perspectives with the world. Whether you're a seasoned writer or new to blogging, our platform offers the tools and support you need to bring your ideas to life. Join our community today and start sharing your voice through the power of blogging.</h3>
-                </div>
-            </div>
+          </div>
+          <Link className='w-16 absolute bottom-10' onClick={scrollToDiv}>
+            <img src='https://assets-v2.lottiefiles.com/a/3ffa9362-1165-11ee-be6e-2bb2b0ace36d/fC7hVY4Sym.gif' />
+          </Link>
         </div>
-    </div>
+      </div>
+
+      <div ref={divRef} className="relative overflow-hidden pt-2">
+        <div aria-hidden="true" className="flex absolute -top-96 start-1/2 transform -translate-x-1/2">
+          <div className="bg-gradient-to-r from-violet-300/50 to-purple-100 blur-3xl w-[25rem] h-[44rem] rotate-[-60deg] transform -translate-x-[10rem] dark:from-violet-900/50 dark:to-purple-900"></div>
+          <div className="bg-gradient-to-tl from-blue-50 via-blue-100 to-blue-50 blur-3xl w-[90rem] h-[50rem] rounded-fulls origin-top-left -rotate-12 -translate-x-[15rem] dark:from-indigo-900/70 dark:via-indigo-900/70 dark:to-blue-900/70"></div>
+        </div>
+
+        <div className="relative z-10">
+          <div className="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-16">
+            <div className="max-w-2xl text-center mx-auto">
+              <p className="inline-block text-sm font-medium bg-clip-text bg-gradient-to-l from-blue-600 to-violet-500 text-transparent dark:from-blue-400 dark:to-violet-400">
+                Created by: Git-rpgs 
+              </p>
+              <div className="mt-5 max-w-2xl">
+                <h1 className="block font-semibold text-gray-800 text-4xl md:text-5xl lg:text-6xl dark:text-gray-200">
+                  iKeep: A blogging platform
+                </h1>
+              </div>
+              <div className="mt-5 max-w-3xl">
+                <p className="text-lg text-gray-600 dark:text-gray-400">iKeep is an elegant and feature-rich blogging platform under active development. Crafted with the latest web technologies including React, Redux Toolkit, and JWT authentication, iKeep offers a seamless and secure user experience.</p>
+              </div>
+              <div className="mt-8 gap-3 flex justify-center">
+                <Link to='/' className="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
+                  About Us
+                  <svg className="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                </Link>
+              </div>
+              <div className='flex flex-col justify-center items-center mb-5 mt-12'>
+                <h1 className="block font-semibold text-gray-800 text-xl md:text-2xl lg:text-3xl underline-offset-8 underline  dark:text-gray-200">
+                  Recent Posts
+                </h1>
+                <div className='flex flex-wrap gap-5 mt-5 justify-center w-screen p-3'>
+                    {
+                        posts && (
+                            posts.map((post)=>{
+                              return <PostCard key={post._id} post={post} />
+                            })
+                        )
+                    }
+                </div>
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <Footer />
+    </>
   )
 }
 
-export default Home
+export default Home;
