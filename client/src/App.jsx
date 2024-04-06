@@ -13,6 +13,7 @@ import AdminPostPrivateRoute from './components/adminPrivateRoute';
 import CreatePost from './pages/CreatePost';
 import UpdatePost from './pages/UpdatePost';
 import PostPage from './pages/PostPage';
+import Search from './pages/Search';
 
 const App = () => {
   // const location = useLocation();
@@ -24,6 +25,7 @@ const App = () => {
         <Route path="/home" element={<Home />} />
         <Route path="/sign-in" element={<SignIn />}/>
         <Route path="/sign-up" element={<SignUp />} />
+        <Route path="/search" element={<Search />} />
         <Route element={<PrivateRoute />}>
           <Route path="/dashboard" element={<Dashboard />} />
         </Route>

@@ -1,13 +1,17 @@
 import React, { useRef, useState, useEffect } from 'react';
 import Header from '../components/header1';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import PostCard from '../components/PostCard';
 import Footer from '../components/footer';
+import { AiOutlineSearch } from 'react-icons/ai';
 function Home() {
   const divRef = useRef(null);
   const [isHeaderVisible, setIsHeaderVisible] = useState(true);
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [posts, setPosts] = useState([]);
+  const location = useLocation();
+  const [searchParams, setSearchParams]= useState('');
+  const navigate = useNavigate();
   const handleScroll = () => {
     const currentScrollPos = window.pageYOffset;
     setIsHeaderVisible(prevScrollPos > currentScrollPos || currentScrollPos === 0);
@@ -40,6 +44,28 @@ function Home() {
     fetchPosts();
   },[])
 
+  useEffect(()=>{
+    const urlParams= new URLSearchParams(location.search);
+    const searchParamsFromUrl= urlParams.get("searchParams");
+    if (searchParamsFromUrl){
+      setSearchParams(searchParamsFromUrl);
+    }
+  },[location.search]);
+
+  const handleSubmit=(e)=>{
+    e.preventDefault();
+    try {
+
+      const urlParams= new URLSearchParams(location.search);
+      urlParams.set('searchParams', searchParams );
+      const searchQuery = urlParams.toString();
+      navigate(`/search?${searchQuery}`);
+
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <>
       <Header isVisible={isHeaderVisible} />
@@ -48,7 +74,12 @@ function Home() {
           <h1 className="pb-4">Search for a blog</h1>
           <div className="w-11/12 md:w-3/4 lg:max-w-3xl m-auto">
             <div className="relative z-30 text-base text-black">
-              <input type="text" value="" placeholder="Keyword" className="mt-2 shadow-md focus:outline-none rounded-2xl py-3 px-6 block w-full" />
+              <form onSubmit={handleSubmit}>
+                <input type="text" value={searchParams} onChange={(e)=>{setSearchParams(e.target.value)}} placeholder="What's on your mind ?" className="mt-2 shadow-md focus:outline-none rounded-2xl py-3 px-6 block w-full" />
+                <button className='absolute top-4 right-3'>
+                  <AiOutlineSearch className='text-[20px] dark:text-gray-500' />
+                </button>
+              </form>
               <div className="text-left absolute top-10 rounded-t-none rounded-b-2xl shadow bg-white divide-y w-full max-h-40 overflow-auto">
               </div>
             </div>

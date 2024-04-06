@@ -1,6 +1,6 @@
 import { Button, Navbar, TextInput } from 'flowbite-react'
 import {Link, useNavigate, useLocation} from 'react-router-dom';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import logo1 from '../assets/logo1.png';
 import {AiOutlineSearch} from 'react-icons/ai';
 import {FaMoon} from 'react-icons/fa';
@@ -10,7 +10,9 @@ import { signOutSuccess } from '../redux/user/userSlice';
 
 function Header1 ({ isVisible }) {
   const path = useLocation().pathname;
+  const location = useLocation();
   const dispatch = useDispatch();
+  const [searchParams, setSearchParams]= useState('')
   const {theme} = useSelector(state => state.theme);
   const {currentUser} = useSelector(state => state.user);
   const navigate = useNavigate();
@@ -31,18 +33,43 @@ function Header1 ({ isVisible }) {
       console.log(error);
     }
   }
+
+  useEffect(()=>{
+    const urlParams= new URLSearchParams(location.search);
+    const searchParamsFromUrl= urlParams.get("searchParams");
+    if (searchParamsFromUrl){
+      setSearchParams(searchParamsFromUrl);
+    }
+  },[location.search]);
+
+  const handleSubmit=(e)=>{
+    e.preventDefault();
+    try {
+
+      const urlParams= new URLSearchParams(location.search);
+      urlParams.set('searchParams', searchParams );
+      const searchQuery = urlParams.toString();
+      navigate(`/search?${searchQuery}`);
+
+    } catch (error) {
+      console.log(error);
+    }
+    
+  }
   return (
     <nav className={`fixed top-0 z-50 w-full bg-white px-2 py-2.5 dark:border-b dark:border-black/20  dark:bg-[rgb(35,39,42)] sm:px-4 border-b-2 transition-opacity duration-500 ${isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
       <div className='mx-auto flex flex-wrap items-center justify-between container'>
         <Link to='/home'>
           <img src={logo1} className='w-[120px] h-[40px] '/>
         </Link>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="hidden lg:inline">
             <div className="relative w-full">
               <div data-testid="right-icon" className="pointer-events-none absolute  inset-y-0 right-0 flex items-center pr-3 h-5 w-5 text-gray-500 dark:text-gray-400" height="1em" width="1em" ></div>
-                <input className=" inputheader block w-full border caret-cyan-500 disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900  focus:ring-purple-500 dark:border-gray-600 dark:bg-[rgb(44,47,51)] dark:text-white dark:placeholder-gray-400 dark:focus:border-gray-500 dark:caret-gray-200 dark:focus:ring-gray-500 p-2.5 text-sm pr-10 rounded-lg" type="text" placeholder="Search..." />
-                <AiOutlineSearch className='absolute top-3 right-3 dark:text-gray-300' />
+                <input className=" inputheader block w-full border caret-cyan-500 disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900  focus:ring-purple-500 dark:border-gray-600 dark:bg-[rgb(44,47,51)] dark:text-white dark:placeholder-gray-400 dark:focus:border-gray-500 dark:caret-gray-200 dark:focus:ring-gray-500 p-2.5 text-sm pr-10 rounded-lg" value={searchParams} onChange={(e)=>{setSearchParams(e.target.value)}} type="text" placeholder="Search..." />
+                <button type='submit' className='absolute top-3 right-3'>
+                <AiOutlineSearch className=' dark:text-gray-300' />
+                </button>
             </div>
           </div>
         </form>
