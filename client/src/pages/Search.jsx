@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Header from "../components/header";
 
-export default function Sidebar() {
+export default function Search() {
     return (
         <>
             <Header />
