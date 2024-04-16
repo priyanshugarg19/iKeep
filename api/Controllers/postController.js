@@ -39,10 +39,10 @@ export const getPosts= async(req,res,next)=>{
             ...(req.query.postId && {_id : req.query.postId}),
             ...(req.query.searchParams && {
                 $or:[{
-                    title: {$regex: req.query.searchParams, $option: 'i'}},
+                    title: new RegExp( req.query.searchParams, 'i')},
                     {
-                    content:{$regex: req.query.searchParams, $option: 'i'}
-                }
+                    content: new RegExp( req.query.searchParams, 'i')}
+                
                 ]
                 
             } )}
