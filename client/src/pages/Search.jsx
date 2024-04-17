@@ -6,8 +6,8 @@ export default function Search() {
     
     const [sidebarData, setSidebarData]= useState({
         searchParams: '',
-        category: 'uncategorized',
-        sorted: 'desc'
+        category: '',
+        sortDirection: 'desc'
     })
     const [posts, setPosts]= useState([]);
     const [loading, setLoading]= useState(false);
@@ -122,7 +122,7 @@ export default function Search() {
 
                                 <div class="flex flex-col">
                                     <label  class="text-stone-600 dark:text-gray-200 text-sm font-medium">
-                                        Sorted
+                                        Sort by
                                     </label>
 
                                     <select
