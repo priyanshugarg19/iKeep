@@ -32,7 +32,7 @@ function Home() {
   useEffect(()=>{
     const fetchPosts = async()=>{
         try {
-            const res = await fetch("/api/post/getposts");
+            const res = await fetch("/api/post/getposts?limit=3");
             const data = await res.json();
             if(res.ok){
                 setPosts(data.posts);
@@ -59,7 +59,7 @@ function Home() {
       const urlParams= new URLSearchParams(location.search);
       urlParams.set('searchParams', searchParams );
       const searchQuery = urlParams.toString();
-      navigate(`/search?${searchQuery}`);
+      navigate(`/search?${searchQuery}&category=&sortDirection=`);
 
     } catch (error) {
       console.log(error);
